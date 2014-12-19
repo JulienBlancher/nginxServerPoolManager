@@ -1,0 +1,17 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Yoopies\\Deployment\\": "src"
+    }
+  },
+  "require": {
+    "symfony/yaml": "~3.0@dev",
+    "symfony/http-foundation": "~3.0@dev",
+    "twig/twig": "~1.16",
+    "kriswallsmith/buzz": "dev-master@dev"
+  },
+  "minimum-stability": "stable",
+  "config": {
+    "bin-dir": "bin"
+  }
+}
