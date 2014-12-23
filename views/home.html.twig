@@ -1,1 +1,60 @@
-hello dude;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+    <div class="row text-center">
+        <h1>Yoopies Server Pool</h1>
+    </div>
+    {% if errors is not null %}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <p class="bg-danger">
+                    {{ errors }}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-2 col-md-offset-4 text-center">
+            {% if front1Status is defined %}
+                <h2>Front 1</h2>
+                {% if front1Status %}
+                    <a href="/down?id=0" class="btn btn-success btn-lg" role="button">IN POOL</a>
+                    <p>Click to put it out of the pool</p>
+                {% else %}
+                    <a href="/up?id=0" class="btn btn-danger btn-lg" role="button">OUT OF POOL</a>
+                    <p>Click to put it in the pool</p>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="col-md-2 text-center">
+            {% if front2Status is defined %}
+                <h2>Front 2</h2>
+                {% if front2Status %}
+                    <a href="/down?id=1" class="btn btn-success btn-lg" role="button">IN POOL</a>
+                    <p>Click to put it out of the pool</p>
+                {% else %}
+                    <a href="/up?id=1" class="btn btn-danger btn-lg" role="button">OUT OF POOL</a>
+                    <p>Click to put it in the pool</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center">
+            {% if allStatus is defined %}
+                <h2>Current config</h2>
+                <p>{{ allStatus|raw }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% block javascripts %}
+        <script src="/vendor/jquery/dist/jquery.min.js"></script>
+        <script src="/vendor/bootstrap/dist/js/bootstrap.min.css"></script>
+    {% endblock %}
+</body>
+</html>

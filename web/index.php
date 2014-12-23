@@ -36,7 +36,7 @@ $controller    = new \Yoopies\Deployment\ServerController($twig, $serverManager)
 /** @var string $actionName */
 $actionName    = ('' === $routeAction = mb_substr($route, 1)) ? 'index' : $routeAction;
 /** @var string $actionMethod */
-$actionMethod  = mb_strtolower($actionName).'Action';
+$actionMethod  = $actionName.'Action';
 
 if (method_exists($controller, $actionMethod)) {
     /** @var array $getParams */
@@ -50,6 +50,6 @@ if (method_exists($controller, $actionMethod)) {
     $controller->$actionMethod(...$paramsValue);
 }
 else
-    echo '404 Baby!';
+    echo '404 Baby! '.$actionMethod;
 
 

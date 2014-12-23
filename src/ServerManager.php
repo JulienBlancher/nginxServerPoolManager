@@ -17,7 +17,10 @@ class ServerManager
     /** @var Config */
     private $config;
 
-
+    /**
+     * @param Browser $buzzBrowser
+     * @param Config $config
+     */
     public function __construct(Browser $buzzBrowser, Config $config)
     {
         $this->buzzBrowser = $buzzBrowser;
@@ -26,130 +29,153 @@ class ServerManager
 
     /**
      * @param $id
+     * @return bool
      */
-    public function upServer($id) {
-        $this->processQuery($id.'&up=');
+    public function up($id)
+    {
+        return $this->processQuery('id=' . $id . '&up=');
     }
 
     /**
      * @param $id
+     * @return string
      */
-    public function downServer($id) {
-        $this->processQuery($id.'&up=');
+    public function down($id)
+    {
+        return $this->processQuery('id=' . $id . '&down=');
     }
 
     /**
      * @param $id
+     * @return bool
      */
-    public function drainServer($id) {
-        $this->processQuery($id.'&drain=');
+    public function drain($id)
+    {
+        return $this->processQuery($id . '&drain=');
     }
 
     /**
-     * @param $serverIp
+     * @param $ip
+     * @return bool
      */
-    public function addServer($serverIp) {
-        $this->processQuery($serverIp);
+    public function add($ip)
+    {
+        return $this->processQuery($ip);
     }
 
     /**
      * @param $id
+     * @return bool
      */
-    public function removeServer($id) {
-        $this->processQuery($id.'&remove=');
-
+    public function remove($id)
+    {
+        return $this->processQuery($id . '&remove=');
     }
 
     /**
-     * @param $serverIp
+     * @param $ip
+     * @return bool
      */
-    public function backupServer($serverIp) {
-        $this->processQuery('backup=&server='.$serverIp);
+    public function backup($ip)
+    {
+        return $this->processQuery('backup=&server=' . $ip);
     }
 
     /**
      * @param $id
      * @param $weight
+     * @return bool
      */
-    public function serverWeight($id, $weight) {
-        $this->processQuery($id.'&weight='.$weight);
+    public function weight($id, $weight)
+    {
+        return $this->processQuery($id . '&weight=' . $weight);
     }
 
     /**
      * @param $id
      * @param $maxFails
+     * @return bool
      */
-    public function serverMaxFails($id, $maxFails) {
-        $this->processQuery($id.'&max_fails='.$maxFails);
+    public function maxFails($id, $maxFails)
+    {
+        return $this->processQuery($id . '&max_fails=' . $maxFails);
 
     }
 
     /**
      * @param $id
      * @param $failTimeout
+     * @return bool
      */
-    public function serverFailTimeout($id, $failTimeout) {
-        $this->processQuery($id.'&fail_timeout='.$failTimeout);
+    public function failTimeout($id, $failTimeout)
+    {
+        return $this->processQuery($id . '&fail_timeout=' . $failTimeout);
     }
 
     /**
      * @param $id
      * @param $slowStart
+     * @return bool
      */
-    public function serverSlowStart($id, $slowStart) {
-        $this->processQuery($id.'&slow_start='.$slowStart);
+    public function slowStart($id, $slowStart)
+    {
+        return $this->processQuery($id . '&slow_start=' . $slowStart);
     }
 
     /**
      * @param $id
      * @param $route
+     * @return bool
      */
-    public function serverRoute($id, $route) {
-        $this->processQuery($id.'&route='.$route);
+    public function route($id, $route)
+    {
+        return $this->processQuery($id . '&route=' . $route);
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function status($id)
+    {
+        $config = $this->processQuery('&id='.$id);
+        return (strstr($config, 'down') === false ? 1 : 0);
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function getConfig($id)
+    {
+        return (bool)$this->processQuery('&id='.$id);
+    }
+
+    /**
+     * @return string
+     */
+    public function getGlobalConfig()
+    {
+        $status = nl2br($this->processQuery(), false);
+
+        return $status;
     }
 
     /**
      * @param string $args
+     * @return bool
      */
-    private function processQuery($args = '') {
-
-        $base_url = $this->config->getSsl().'://'.$this->config->getDomain().($this->config->getPort() ? ':'.$this->config->getPort() : '').'/'.$this->config->getUpstreamConfUrl().'?upstream='.$this->config->getUpstream();
-
-        echo $base_url.'<br>';
-        $response = $this->buzzBrowser->get($base_url.'?'.$args);
-
-        echo $response->getContent();
-    }
-
-    /**
-     * @return Browser
-     */
-    public function getBuzzBrowser()
+    private function processQuery($args = '')
     {
-        return $this->buzzBrowser;
-    }
+        $base_url = $this->config->getSsl() . '://' . $this->config->getDomain() . ($this->config->getPort() ? ':' . $this->config->getPort() : '') . '/' . $this->config->getUpstreamConfUrl() . '?upstream=' . $this->config->getUpstream();
 
-    /**
-     * @param Browser $buzzBrowser
-     */
-    public function setBuzzBrowser($buzzBrowser)
-    {
-        $this->buzzBrowser = $buzzBrowser;
-    }
+        $response = $this->buzzBrowser->get($base_url . ($args ? '&' : '') . $args);
 
-    /**
-     * @return Config
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
+        $status_code = $response->getHeaders()[0];
 
-    /**
-     * @param Config $config
-     */
-    public function setConfig($config)
-    {
-        $this->config = $config;
+        if (strstr($status_code, '200'))
+            return $response->getContent();
+        else
+            return null;
     }
 }
