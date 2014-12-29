@@ -1,6 +1,6 @@
-domain: 'yoopies.fr'
-port: 8080
-upstream: 'yoopies'
+domain: 'domain.ext'
+port: 80
+upstream: 'dynamicUpstream'
 ssl: false
 upstream_conf_url: 'upstream_conf'
 twig_cache: ~
