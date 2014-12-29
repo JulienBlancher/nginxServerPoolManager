@@ -1,6 +1,9 @@
 <?php
 /**
  * @author Julien Blancher <ju.blancher@gmail.com>
+ * TODO errors, success, warning bubles etc in Session
+ * TODO be able to change all the parameters available in the Nginx "API"
+ * TODO cf ServerController->indexAction() to be fully scalable
  */
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -15,6 +18,23 @@ $config = new \Yoopies\Deployment\Config(
 /**
  * Load Twig Baby
  */
+
+/**
+ * @param $param
+ *
+ * @return mixed|string
+ */
+function ParamToController($param)
+{
+    $controller = str_replace("_", " ", $param);
+    $controller = ucwords($controller);
+    $controller = lcfirst($controller);
+    $controller = str_replace(" ", "", $controller);
+    $controller = $controller."Action";
+
+    return $controller;
+}
+
 Twig_Autoloader::register();
 /** @var Twig_Loader_Filesystem $loader */
 $loader = new Twig_Loader_Filesystem([
@@ -25,7 +45,9 @@ $twig = new Twig_Environment($loader, [
     'cache' => true === $config->isTwigCache() ? __DIR__.'/../var/cache' : false,
     'debug' => true,
 ]);
+$paramToController = new Twig_SimpleFilter('paramtocontroller', 'ParamToController');
 $twig->addExtension(new Twig_Extension_Debug());
+$twig->addFilter($paramToController); // TODO finish this - Conf modification
 
 
 /** @var \Buzz\Browser $buzzBrowser */

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Julien Blancher <ju.blancher@gmail.com>
+ */
 
 namespace Yoopies\Deployment;
 
@@ -121,7 +124,6 @@ class ServerController extends ModelController
     public function maxFailsAction($id, $maxFails)
     {
         $this->getServerManager()->maxFails($id, $maxFails);
-
     }
 
     /** TODO

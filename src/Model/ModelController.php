@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Julien Blancher <ju.blancher@gmail.com>
+ */
 
 namespace Yoopies\Deployment\Model;
 
