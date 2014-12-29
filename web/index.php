@@ -26,10 +26,15 @@ $config = new \Yoopies\Deployment\Config(
  */
 function ParamToController($param)
 {
+    /** @var  $controller */
     $controller = str_replace("_", " ", $param);
+    /** @var  $controller */
     $controller = ucwords($controller);
+    /** @var  $controller */
     $controller = lcfirst($controller);
+    /** @var  $controller */
     $controller = str_replace(" ", "", $controller);
+    /** @var  $controller */
     $controller = $controller."Action";
 
     return $controller;
@@ -45,6 +50,7 @@ $twig = new Twig_Environment($loader, [
     'cache' => true === $config->isTwigCache() ? __DIR__.'/../var/cache' : false,
     'debug' => true,
 ]);
+/** @var  $paramToController */
 $paramToController = new Twig_SimpleFilter('paramtocontroller', 'ParamToController');
 $twig->addExtension(new Twig_Extension_Debug());
 $twig->addFilter($paramToController); // TODO finish this - Conf modification
