@@ -1,4 +1,5 @@
 /var/cache/*
 !/var/cache/.gitkeep
 /vendor/
-web/vendor.idea
+web/vendor
+.idea
