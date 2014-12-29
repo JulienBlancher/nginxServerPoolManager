@@ -24,12 +24,18 @@ class ServerController extends ModelController
     }
 
     /**
-     *
+     * TODO getAllStatus and return it to be fully scalable
      */
     public function indexAction()
     {
+        $globalConfig = $this->getServerManager()->getGlobalConfig();
+
+        foreach ($globalConfig as $key => $front) {
+            $globalConfig[$key] = explode(" ", $front);
+        }
+
         $this->render('home.html.twig', [
-            'allStatus'     =>  $this->getServerManager()->getGlobalConfig(),
+            'allStatus' => $globalConfig,
             'front1Status'  =>  $this->getServerManager()->status('0'),
             'front2Status'  =>  $this->getServerManager()->status('1'),
             'errors'        =>  ( !isset($_GET['errors']) ? null : $_GET['errors'] ),
@@ -67,7 +73,7 @@ class ServerController extends ModelController
         header('Location: ' . parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) . ( null === $errors ? '' : '?errors='.$errors ) );
     }
 
-    /**
+    /** TODO
      * @param $id
      */
     public function drainAction($id)
@@ -75,7 +81,7 @@ class ServerController extends ModelController
         $this->getServerManager()->drain($id);
     }
 
-    /**
+    /** TODO
      * @param $serverIp
      */
     public function addAction($serverIp)
@@ -83,7 +89,7 @@ class ServerController extends ModelController
         $this->getServerManager()->add($serverIp);
     }
 
-    /**
+    /** TODO
      * @param $id
      */
     public function removeAction($id)
@@ -91,7 +97,7 @@ class ServerController extends ModelController
         $this->getServerManager()->remove($id);
     }
 
-    /**
+    /** TODO
      * @param $serverIp
      */
     public function backupAction($serverIp)
@@ -99,7 +105,7 @@ class ServerController extends ModelController
         $this->getServerManager()->backup($serverIp);
     }
 
-    /**
+    /** TODO
      * @param $id
      * @param $weight
      */
@@ -108,7 +114,7 @@ class ServerController extends ModelController
         $this->getServerManager()->weight($id, $weight);
     }
 
-    /**
+    /** TODO
      * @param $id
      * @param $maxFails
      */
@@ -118,7 +124,7 @@ class ServerController extends ModelController
 
     }
 
-    /**
+    /** TODO
      * @param $id
      * @param $failTimeout
      */
@@ -127,7 +133,7 @@ class ServerController extends ModelController
         $this->getServerManager()->failTimeout($id, $failTimeout);
     }
 
-    /**
+    /** TODO
      * @param $id
      * @param $slowStart
      */
@@ -136,7 +142,7 @@ class ServerController extends ModelController
         $this->getServerManager()->slowStart($id, $slowStart);
     }
 
-    /**
+    /** TODO
      * @param $id
      * @param $route
      */
@@ -160,18 +166,6 @@ class ServerController extends ModelController
     public function getConfigAction($ip)
     {
         $this->getServerManager()->status($ip);
-    }
-
-    /**
-     *
-     */
-    public function getGlobalConfigAction()
-    {
-        $globalConfig = $this->getServerManager()->getGlobalConfig();
-
-        $this->render('home.html.twig', [
-            'allStatus' => $globalConfig,
-        ]);
     }
 
     /**

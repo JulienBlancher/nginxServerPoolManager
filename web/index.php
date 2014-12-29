@@ -23,7 +23,10 @@ $loader = new Twig_Loader_Filesystem([
 /** @var Twig_Environment $twig */
 $twig = new Twig_Environment($loader, [
     'cache' => true === $config->isTwigCache() ? __DIR__.'/../var/cache' : false,
+    'debug' => true,
 ]);
+$twig->addExtension(new Twig_Extension_Debug());
+
 
 /** @var \Buzz\Browser $buzzBrowser */
 $buzzBrowser   = new \Buzz\Browser();
@@ -50,6 +53,6 @@ if (method_exists($controller, $actionMethod)) {
     $controller->$actionMethod(...$paramsValue);
 }
 else
-    echo '404 Baby! '.$actionMethod;
+    echo $actionMethod.': 404 Baby! ';
 
 

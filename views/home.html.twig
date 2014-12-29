@@ -2,12 +2,38 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Yoopies Server Pool Manager</title>
+
     <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/home.css">
+
 </head>
 <body>
+<div class="container">
     <div class="row text-center">
-        <h1>Yoopies Server Pool</h1>
+        <h1>Yoopies Server Pool Manager</h1>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addServer">Add new server in pool</button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="addServer" tabindex="-1" role="dialog" aria-labelledby="addServerLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="addServerLabel">Add new server in pool</h4>
+                    </div>
+                    <div class="modal-body">
+                        content
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary">Add server</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     {% if errors is not null %}
         <div class="row">
@@ -18,43 +44,17 @@
             </div>
         </div>
     {% endif %}
-    <div class="row">
-        <div class="col-md-2 col-md-offset-4 text-center">
-            {% if front1Status is defined %}
-                <h2>Front 1</h2>
-                {% if front1Status %}
-                    <a href="/down?id=0" class="btn btn-success btn-lg" role="button">IN POOL</a>
-                    <p>Click to put it out of the pool</p>
-                {% else %}
-                    <a href="/up?id=0" class="btn btn-danger btn-lg" role="button">OUT OF POOL</a>
-                    <p>Click to put it in the pool</p>
-                {% endif %}
-            {% endif %}
-        </div>
-        <div class="col-md-2 text-center">
-            {% if front2Status is defined %}
-                <h2>Front 2</h2>
-                {% if front2Status %}
-                    <a href="/down?id=1" class="btn btn-success btn-lg" role="button">IN POOL</a>
-                    <p>Click to put it out of the pool</p>
-                {% else %}
-                    <a href="/up?id=1" class="btn btn-danger btn-lg" role="button">OUT OF POOL</a>
-                    <p>Click to put it in the pool</p>
-                {% endif %}
-            {% endif %}
-        </div>
+    <div class="col-md-12 row">
+        {% include 'fronts_status.html.twig' with {'frontStatus': front1Status, 'frontId': 0, 'allStatus': allStatus} %}
+        {% include 'fronts_status.html.twig' with {'frontStatus': front2Status, 'frontId': 1, 'allStatus': allStatus} %}
     </div>
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3 text-center">
-            {% if allStatus is defined %}
-                <h2>Current config</h2>
-                <p>{{ allStatus|raw }}</p>
-            {% endif %}
-        </div>
-    </div>
+    <a href="//nginx.org/en/docs/http/ngx_http_upstream_module.html" target="_blank" id="help">
+        <img src="//www.8164.org/wp-content/uploads/2008/11/clippy.jpg">
+    </a>
     {% block javascripts %}
         <script src="/vendor/jquery/dist/jquery.min.js"></script>
-        <script src="/vendor/bootstrap/dist/js/bootstrap.min.css"></script>
+        <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     {% endblock %}
+</div>
 </body>
 </html>

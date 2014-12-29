@@ -99,7 +99,6 @@ class ServerManager
     public function maxFails($id, $maxFails)
     {
         return $this->processQuery($id . '&max_fails=' . $maxFails);
-
     }
 
     /**
@@ -152,13 +151,14 @@ class ServerManager
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getGlobalConfig()
     {
-        $status = nl2br($this->processQuery(), false);
+        $globalConfig = str_replace("server ", "server=", $this->processQuery());
+        $globalConfig = str_replace("; #", "", trim($globalConfig));
 
-        return $status;
+        return explode("\n", $globalConfig);
     }
 
     /**

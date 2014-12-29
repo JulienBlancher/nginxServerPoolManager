@@ -1,3 +1,21 @@
 .bg-danger {
     padding: 15px;
 }
+
+.btn.disabled {
+    pointer-events: auto;
+}
+
+.action-button {
+    margin: 30px 0;
+}
+
+#help {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+#help > img {
+    height: 200px;
+}
